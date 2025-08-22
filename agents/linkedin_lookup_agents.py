@@ -15,7 +15,8 @@ from tools.tools import get_profile_url_tavily
 
 load_dotenv()
 
-def lookup(name:str) -> str:
+
+def lookup(name: str) -> str:
     llm = ChatOpenAI(
         temperature=0,
         model="gpt-4o-mini",
@@ -34,19 +35,20 @@ def lookup(name:str) -> str:
         Tool(
             name="Crawl Google 4 linkedin profile page",
             func=get_profile_url_tavily,
-            description="useful for when you need get the Linkedin page URL"
+            description="useful for when you need get the Linkedin page URL",
         )
     ]
     react_prompt = hub.pull("hwchase17/react")
     agent = create_react_agent(llm=llm, tools=tools_for_agent, prompt=react_prompt)
-    aganet_executor = AgentExecutor(agent=agent, tools=tools_for_agent,verbose=True)
+    aganet_executor = AgentExecutor(agent=agent, tools=tools_for_agent, verbose=True)
 
-    result = aganet_executor.invoke(input={
-        "input": prompt_template.format_prompt(name_of_person=name)
-    })
+    result = aganet_executor.invoke(
+        input={"input": prompt_template.format_prompt(name_of_person=name)}
+    )
     linkedin_profile_url = result["output"]
     return linkedin_profile_url
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     linkdin_url = lookup(name="Viplav Dube")
     print(linkdin_url)

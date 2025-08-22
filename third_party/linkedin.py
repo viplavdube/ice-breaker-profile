@@ -4,8 +4,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def scrape_linkedin_profile(linkedin_profile_url: str, mock:bool=False):
-    """ Scrape information from LinkedIn,
+
+def scrape_linkedin_profile(linkedin_profile_url: str, mock: bool = False):
+    """Scrape information from LinkedIn,
     Manually scrap the information from the LinkdIn profile.
     """
     """
@@ -24,16 +25,16 @@ def scrape_linkedin_profile(linkedin_profile_url: str, mock:bool=False):
         params = {
             "apikey": os.environ["SCRAPIN_API_KEY"],
         }
-        payload = {
-            "linkedInUrl": linkedin_profile_url,
-            "includes": {}
-        }
+        payload = {"linkedInUrl": linkedin_profile_url, "includes": {}}
         headers = {"Content-Type": "application/json"}
         response = requests.post(url, json=payload, headers=headers, params=params)
 
     data = response.json().get("person")
     return data
-if __name__=="__main__":
+
+
+if __name__ == "__main__":
     scrape_linkedin_profile(
-        linkedin_profile_url="https://www.linkedin.com/in/viplav-dube-116043ba/",mock=True
+        linkedin_profile_url="https://www.linkedin.com/in/viplav-dube-116043ba/",
+        mock=True,
     )
