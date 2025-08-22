@@ -1,0 +1,39 @@
+<!-- templates/result.html -->
+...
+<body>
+  <div class="container">
+    {% if not_found %}
+      <div class="card warn">
+        <h2>😕 No information found</h2>
+        <p>I couldn’t find a public profile for "<strong>{{ first_name }} {{ last_name }}</strong>".<br>
+           Try a full name, add company/location, or check spelling.</p>
+      </div>
+      <a href="/">🔙 Back to Home</a>
+    {% else %}
+      {% if photo %}
+        <img src="{{ photo }}" alt="Profile Picture">
+      {% endif %}
+
+      <h1>{{ first_name }} {{ last_name }}</h1>
+
+      <div class="card summary">
+        <h2>📄 Profile Summary</h2>
+        <p>{{ summary }}</p>
+      </div>
+
+      {% if facts %}
+      <div class="card facts">
+        <h2>💡 Interesting Facts</h2>
+        <ul>
+          {% for fact in facts %}
+          <li>{{ fact }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <a href="/">🔙 Back to Home</a>
+    {% endif %}
+  </div>
+</body>
+.warn { background: rgba(255, 193, 7, 0.15); border-left: 5px solid #ffc107; }

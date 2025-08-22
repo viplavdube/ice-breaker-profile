@@ -36,5 +36,5 @@ def scrape_linkedin_profile(linkedin_profile_url: str, mock: bool = False):
 if __name__ == "__main__":
     scrape_linkedin_profile(
         linkedin_profile_url="https://www.linkedin.com/in/viplav-dube-116043ba/",
-        mock=True,
+        mock=False,
     )

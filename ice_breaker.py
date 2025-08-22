@@ -1,3 +1,4 @@
+from typing import Tuple
 from dotenv import load_dotenv
 import os
 from langchain_core.prompts import PromptTemplate
@@ -5,7 +6,7 @@ from langchain_openai import ChatOpenAI
 from langchain.chains import LLMChain
 
 from agents.linkedin_lookup_agents import lookup
-from output_parsers import summary_parser
+from output_parsers import summary_parser, Summary
 from third_party.linkedin import scrape_linkedin_profile
 
 
@@ -16,10 +17,10 @@ def get_linkedin_url(name: str, mock_url: bool=False) -> str:
     return linkedin_url
 
 
-def get_brief_information(name: str) -> str:
-    target_linkedin_profile_url = get_linkedin_url(name=name, mock_url=True)
+def get_brief_information(name: str) -> Tuple[Summary, str, str, str]:
+    target_linkedin_profile_url = get_linkedin_url(name=name, mock_url=False)
     person_information = scrape_linkedin_profile(
-        linkedin_profile_url=target_linkedin_profile_url, mock=True
+        linkedin_profile_url=target_linkedin_profile_url, mock=False
     )
     summary_template = """
                 Give me the information {information} about a person from I want you to create:
@@ -36,8 +37,8 @@ def get_brief_information(name: str) -> str:
     )
     llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo")
     chain = summary_prompt_template | llm | summary_parser
-    res = chain.invoke(input={"information": person_information})
-    return res
+    res:Summary = chain.invoke(input={"information": person_information})
+    return res, person_information.get("photoUrl"), person_information.get("firstName"), person_information.get("lastName")
 
 
 if __name__ == "__main__":
